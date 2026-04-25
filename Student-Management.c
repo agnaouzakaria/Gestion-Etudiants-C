@@ -2,23 +2,23 @@
 #include <stdlib.h>
 #include <string.h>
 
-// 1-a : Structure de l'étudiant
+// Structure contenant les informations de l'étudiant
 typedef struct Etudiant
 {
     int apogee;
     char nom[20];
     char prenom[20];
-    char filiere[10]; // تصحيح الاسم و زيادة المساحة
+    char filiere[10]; 
     struct Etudiant *suivant;
     struct Etudiant *precedent;
 } etudiant;
 
-// 1-b : Variables globales
+// Variables globales pour la gestion de la liste
 etudiant *debut;
 etudiant *fin;
 int taille;
 
-// 2-a : Initialiser la liste
+// Initialisation de la liste
 void initialiser()
 {
     debut = NULL;
@@ -26,7 +26,7 @@ void initialiser()
     taille = 0;
 }
 
-// 2-b : Créer un nouveau noeud
+// Création d'un nouveau noeud avec allocation dynamique
 etudiant* cree_noeud(int apo, char *nm, char *pr, char *fil)
 {
     etudiant *nv = (etudiant*)malloc(sizeof(etudiant));
@@ -41,7 +41,7 @@ etudiant* cree_noeud(int apo, char *nm, char *pr, char *fil)
     return nv;
 }
 
-// 2-c : Insertion dans une liste vide
+// Cas particulier : insertion dans une liste vide
 void inserer_liste_vide(etudiant *e)
 {
     if(taille > 0) return;
@@ -52,7 +52,7 @@ void inserer_liste_vide(etudiant *e)
     taille++;
 }
 
-// 2-d : Insertion au début
+// Insertion au début de la liste
 void inserer_debut(etudiant *e)
 {
     if(e == NULL) return;
@@ -66,7 +66,7 @@ void inserer_debut(etudiant *e)
     }
 }
 
-// 2-e : Insertion à la fin
+// Insertion à la fin de la liste
 void inserer_fin(etudiant *e)
 {
     if(e == NULL) return;
@@ -80,39 +80,38 @@ void inserer_fin(etudiant *e)
     }
 }
 
-// 2-f : Supprimer un étudiant par sa position
+// Suppression d'un noeud par position (1..n)
 int supp_noeud(int pos)
 {
     if(taille <= 0 || debut == NULL || pos < 1 || pos > taille) return 0;
 
     etudiant *supp = debut;
     
-    // البحث عن العنصر المراد حذفه
     for(int i = 1; i < pos; i++) {
         supp = supp->suivant;
     }
 
-    if(supp == debut) { // حذف العنصر الأول
+    if(supp == debut) { 
         debut = debut->suivant;
         if(debut != NULL) debut->precedent = NULL;
         else fin = NULL;
     } 
-    else if(supp == fin) { // حذف العنصر الأخير
+    else if(supp == fin) { 
         fin = fin->precedent;
         if(fin != NULL) fin->suivant = NULL;
         else debut = NULL;
     } 
-    else { // حذف عنصر في الوسط
+    else { 
         supp->precedent->suivant = supp->suivant;
         supp->suivant->precedent = supp->precedent;
     }
 
-    free(supp); // تصحيح: مسح الكائن بالكامل فقط
+    free(supp); 
     taille--;
     return 1;
 }
 
-// دالة العرض
+// Affichage de la liste sous forme de tableau
 void afficher()
 {
     etudiant *courant = debut;
@@ -129,14 +128,13 @@ int main()
 {
     initialiser();
     
-    // إضافة بيانات تجريبية
+    // Exemple de test
     inserer_debut(cree_noeud(1234, "Agnaou", "Zakaria", "SIR"));
     inserer_fin(cree_noeud(5678, "Ahmed", "Ali", "IDIA"));
     inserer_fin(cree_noeud(9012, "Omar", "Yassine", "GI"));
     
-    printf("Affichage de la liste :");
     afficher();
-
+    
     printf("Suppression de la position 2...\n");
     supp_noeud(2);
     
